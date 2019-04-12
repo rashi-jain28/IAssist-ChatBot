@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SkillsSwapper</title>
+  <link rel="stylesheet" type="text/css" href="/resources/style.css">
+</head>
+<body>
+  <% include partials/header.ejs %>
+  <% include partials/user-navigation.ejs %>
+  <% include partials/site-navigation.ejs %>
+  <main>
+    <ul class="breadcrumb">
+      <li><a href="registration">Registration</a></li>
+    </ul>
+
+    <form action="/registration" method="POST">
+      <table id="loginstyle">
+        <tr>
+          <td><label><b>First Name:</label></td>
+            <td><input type="text" name="fname" size="40" required/> </td>
+            <td>
+              <%
+              if(errors.fname!=undefined){
+                %>
+                <p id ="error"><%=errors.fname.msg%></p>
+                <%}%>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><b>Last Name: </label></td>
+              <td>
+                    <input type="text" name="lname" size="40" required/>
+              </td>
+              <td>
+                    <% if(errors.lname!=undefined){ %>
+                      <p id ="error"><%=errors.lname.msg%></p>
+                      <%}%>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><b>Email Address: </label></td>
+                <td>
+                  <input type="text" name="email" size="40" required/>
+                </td>
+                <td>
+                  <% if(errors.email!=undefined){ %>
+                  <p id ="error"><%=errors.email.msg%></p>
+                  <%}%>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label><b>NinerID: </label></td>
+                  <td>
+                    <input type="text" name="ninerID" size="40" required/>
+                  </td>
+                  <td>
+                    <% if(errors.userid!=undefined){ %>
+                    <p id ="error"><%=errors.userid.msg%></p>
+                    <%}%>
+                  </td>
+                </tr>
+              <tr>
+                <td>
+                  <label><b>Password: </label></td>
+                  <td>
+                    <input type="password" name="password" size="40" required/>
+                  </td>
+                  <td>
+                    <% if(errors.password!=undefined){ %>
+                    <p id ="error"><%=errors.password.msg%></p>
+                    <%}%>
+                  </td>
+                </tr>
+                  </table>
+                      <input type="submit" class="buttonlogin" value="Register "/>
+                      <br><br>
+                      </form>
+                      <p>
+
+                        <br><br>
+                      </main>
+                      <% include partials/footer.ejs %>
+                    </body>
+                    </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SkillsSwapper</title>
+  <link rel="stylesheet" type="text/css" href="/resources/style.css">
+  <script src="/resources/myJS.js"></script>
+</head>
+<body>
+  <% include partials/header.ejs %>
+  <% include partials/user-navigation.ejs %>
+  <% include partials/site-navigation.ejs %>
+  <main>
+    <div class ="mainpage">
+      <img class ="mainimage" src = "/resources/UNCC.jpg" alt ="logo">
+      <img class ="mainimage" src = "/resources/UNCC1.jpg" alt ="logo">
+      <img class ="mainimage" src = "/resources/UNCC2.png" alt ="logo">
+      <script>
+var myIndex = 0;
+carousel();
+
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mainimage");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  myIndex++;
+  if (myIndex > x.length) {myIndex = 1}
+  x[myIndex-1].style.display = "block";
+  setTimeout(carousel, 2000); // Change image every 2 seconds
+}
+</script>
+
+  </main>
+  <% include partials/footer.ejs %>
+
+</body>
+</html>
