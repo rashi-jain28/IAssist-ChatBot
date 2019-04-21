@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ninernet');
-var user = require('../model/user');
+var users = require('../model/user');
 var await = require('asyncawait/await');
 
 var users = mongoose.Schema({
@@ -22,10 +22,7 @@ const getUserByEmailPassword = async function(emailAddress,pwd){
   return arr;
 }
 const findUserByEmail = async function(email){
-  console.log('---inside findUser')
-  console.log(email);
   if(email){
-    console.log('inside if');
      return new Promise((resolve, reject) => {
        Users.findOne({ emailAddress: email })
          .exec((err, doc) => {
@@ -37,14 +34,12 @@ const findUserByEmail = async function(email){
    }
 }
 const findUser = async function(ninerID){
-  console.log(ninerID);
   const arr = await Users.find({ninerID:ninerID});
   console.log(arr);
   return arr
 }
 const findUserByID = async function(ninerID){
   if(ninerID){
-    console.log('inside ninerID');
      return new Promise((resolve, reject) => {
        Users.findOne({ ninerID: ninerID })
          .exec((err, doc) => {
@@ -64,8 +59,6 @@ const addUser = async function(ninerID,firstName, lastName, emailAddress, passwo
       password:password,
     })
     const arr = user.save();
-    console.log('inside add user');
-    console.log(arr);
   }
 
   module.exports.getUsers = getUsers;

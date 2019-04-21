@@ -10,9 +10,128 @@
   <% include partials/user-navigation.ejs %>
   <% include partials/site-navigation.ejs %>
   <main>
-    <div class ="aboutpage">  
-    </div>
+    <div class="container">
+  			<div class="row">
+  				<div class="col-sm-4 conversation app-one">
+  					<div class="heading">
+  						<div class="col-sm-6 col-md-3 col-xs-4 heading-avatar">
+  							<div class="heading-avatar-icon">
+  								<img src="/resources/images/avatar.png">
+  							</div>
+  						</div>
+  						<div class="col-sm-6 col-xs-6 heading-name">
+  							<a class="heading-name-meta">iAssist
+  							</a>
+  							<span class="heading-online">Online</span>
+  						</div>
+  						<div class="col-sm-1 col-xs-1  heading-dot pull-right">
+  							<i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+  						</div>
+  					</div>
+  					<div class="row message" id="conversation">
+
+  						<div class="row message-body">
+  							<div class="col-sm-12 message-main-receiver">
+  								<div class="receiver">
+  									<div class="message-text">
+  										Hi, student <%=user%>
+  									</div>
+  									<span class="message-time pull-right">
+  									</span>
+  								</div>
+  							</div>
+  						</div>
+
+  					</div>
+  					<div class="row reply">
+
+  						<div class="col-sm-8 col-xs-8 reply-main">
+  							<textarea class="form-control" rows="2" id="comment" onkeypress="replyMain(event)"></textarea>
+  						</div>
+  						 <div class="col-sm-2 col-xs-2 reply-recording">
+  							<i class="fa fa-microphone fa-2x" aria-hidden="true" id="microphone-send"></i>
+  						</div>
+  						<div class="col-sm-2 col-xs-2 reply-send">
+  							<i class="fa fa-send fa-2x" aria-hidden="true" id="chat-send"></i>
+  						</div>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
   </main>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script >
+    'use strict';
+
+    $(function(){
+
+    });
+
+    const socket = io();
+    const query = document.querySelector('#comment');
+    const html = document.querySelector('#conversation');
+
+    document.querySelector('#chat-send').addEventListener('click', () => {
+    	var date = new Date();
+    	var htmlResponse	=	"<div class=\"row message-body\">\
+    	<div class=\"col-sm-12 message-main-sender\">\
+    	<div class=\"sender\">\
+    	<div class=\"message-text\">" +
+    	query.value +
+    	"</div>\
+    	<span class=\"message-time pull-left\">"
+    	+ date.getHours() + ":" + date.getMinutes() +
+    	"</span>\
+    	</div>\
+    	</div>\
+    	</div>";
+    	query.value = '';
+    	html.innerHTML = html.innerHTML + htmlResponse;
+    });
+
+    function replyMain(e){
+    	var key = e.which || e.keyCode;
+        if (key === 13 && query.value != "") { // 13 is enter
+        	var date = new Date();
+        	var htmlResponse	=	"<div class=\"row message-body\">\
+        	<div class=\"col-sm-12 message-main-sender\">\
+        	<div class=\"sender\">\
+        	<div class=\"message-text\">" +
+        	query.value +
+        	"</div><span class=\"message-time pull-left\">"
+        	+ date.getHours() + ":" + date.getMinutes() +
+        	"</span>\
+        	</div>\
+        	</div>\
+        	</div>";
+        	html.innerHTML = html.innerHTML + htmlResponse;
+        	socket.emit('chat request', query.value);
+        	query.value = '';
+
+        	}
+    };
+
+    socket.on('ai response', function(response) {
+
+    	var date = new Date();
+    	if(response == '') response = '(No answer...)';
+    	var htmlResponse = "<div class=\"row message-body\">\
+    	<div class=\"col-sm-12 message-main-receiver\">\
+    	<div class=\"receiver\">\
+    	<div class=\"message-text\">" +
+    	response +
+    	"</div>\
+    	<span class=\"message-time pull-left\">"
+    	+ date.getHours() + ":" + date.getMinutes() +
+    	"</span>\
+    	</div>\
+    	</div>\
+    	</div>";
+    	html.innerHTML = html.innerHTML + htmlResponse;
+    });
+
+    </script>
   <% include partials/footer.ejs %>
 
 </body>

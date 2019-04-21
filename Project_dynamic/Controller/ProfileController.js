@@ -11,6 +11,7 @@ app.use(session({
   secret: 'this-is-a-secret-token'
 }));
 
+//registration
 exports.register= async function(req, res){
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -28,39 +29,39 @@ exports.register= async function(req, res){
         res.redirect('/user')
     })
     .catch(function(error){
-            console.log("Error saving user: ");
-            console.log(error);
             next();
         });
   }
 
+
+//login
 exports.login= async function(req, res){
   const error = validationResult(req);
-  console.log('error is');
-  console.log(error.mapped());
   if(!error.isEmpty()){
     res.render('login',{errors:error.mapped(),dberror:""});
     return ;
   }
   var password = req.body.password;
-  console.log(req.body.ninerID);
   await userDB.findUser(req.body.ninerID)
     .then(function(user) {
-      console.log('***************');
-      console.log(user);
-      console.log(user[0].password);
+      if(user.length!=0)
+      {
         bcrypt.compare(password, user[0].password)
         .then(function(samePassword) {
             if(!samePassword) {
                 res.render('login',{errors:"",dberror:"Invalid username or password"});
             }
             req.session.theUser = user[0].ninerID;
-            res.render('user')
+            req.session.theUserName = user[0].firstName;
+            res.redirect('/user');
+            //res.render('user')
         })
+      }
+      else{
+        res.render('login',{errors:"",dberror:"Invalid username or password"});
+      }
     })
     .catch(function(error){
-        console.log("Error authenticating user: ");
-        console.log(error);
         next();
     });
 }
